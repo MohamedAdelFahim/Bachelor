@@ -150,15 +150,13 @@ void Display() {
 		if (points[i].dataI < is)
 			continue;
 
-			if(choice != 2)
-			glColor3f(points[i].dataV / 255.0, points[i].dataV / 255.0, points[i].dataV / 255.0);
+
+			glColor3f(points[i].dataV/255 , points[i].dataV/255 , points[i].dataV /255);
      		glVertex3f(points[i].dataX, points[i].dataY, points[i].dataZ);
 	
-			if (choice != 2)
 			glColor3f(points[i+1].dataV / 255.0, points[i+1].dataV / 255.0, points[i+1].dataV / 255.0);
 			glVertex3f(points[i+1].dataX, points[i + 1].dataY, points[i + 1].dataZ);
 
-			if (!choice != 2)
 			glColor3f(points[i+2].dataV / 255.0, points[i+2].dataV / 255.0, points[i+2].dataV / 255.0);
 			glVertex3f(points[i + 2].dataX, points[i + 2].dataY, points[i + 2].dataZ);
 
@@ -234,7 +232,6 @@ void readFile5Points(string fileName) {
 void readFile4Points(string fileName) {
 	int count = 0;
 
-
 	short xx, yy, zz, vv;
 	ifstream myfile;
 	myfile.open(fileName);
@@ -297,17 +294,17 @@ int main(int argc, char** argv)
 
 		cout << "Use Delaunay triangulation or regular triangulation? press 1 for Delaunay triangulation and 2 for regular triangulation." << endl;
 		cin >> triangulationType;
-
-		cout << "Only coloured,coloured and remove front part of the brain or with no colours? press 1 for only coloured, 2 for removal  and 3 for no colours." << endl;
-		cin >> colouredChoice;
 		
-		while (!triangulationType == 1 || !triangulationType == 2) {
+		while (triangulationType < 1 || triangulationType> 2) {
 			cout << "Please choose a correct triangulation type." << endl;
 			cin >> triangulationType;
 
 		}
+		
+		cout << "Only coloured,coloured and remove front part of the brain or with no colours? press 1 for only coloured, 2 for removal  and 3 for no colours." << endl;
+		cin >> colouredChoice;		
 
-		while (!colouredChoice == 1 || !colouredChoice == 2 || !colouredChoice == 3) {
+		while (colouredChoice < 1 || colouredChoice> 3) {
 			cout << "Please choose a correct colouring choice." << endl;
 			cin >> colouredChoice;
 
@@ -351,7 +348,7 @@ int main(int argc, char** argv)
 		cout << "Use Delaunay triangulation or regular triangulation? press 1 for Delaunay triangulation and 2 for regular triangulation." << endl;
 		cin >> triangulationType;
 
-		while (!triangulationType == 1 || !triangulationType == 2) {
+		while (triangulationType < 1 || triangulationType> 2) {
 			cout << "Please choose a correct triangulation type." << endl;
 			cin >> triangulationType;
 
@@ -385,7 +382,12 @@ int main(int argc, char** argv)
 		string triangulatedInputFile;
 		cout << "Please enter the name of the triangulated input file"<<endl;
 		cin >> triangulatedInputFile;
-		
+		while (triangulationType < 1 || triangulationType> 2) {
+			cout << "Please choose a correct triangulation type." << endl;
+			cin >> triangulationType;
+
+		}
+
 		Manage_TraingulationOutput(inputFile, triangulatedInputFile, true, false);
 		finalFile = triangulatedInputFile + "_Coloured.txt";
 
@@ -399,6 +401,13 @@ int main(int argc, char** argv)
 		string triangulatedInputFile;
 		cout << "Please enter the name of the triangulated input file" << endl;
 		cin >> triangulatedInputFile;
+
+		while (triangulationType < 1 || triangulationType> 2) {
+			cout << "Please choose a correct triangulation type." << endl;
+			cin >> triangulationType;
+
+		}
+
 		Manage_TraingulationOutput(inputFile, triangulatedInputFile, true, true);
 		finalFile = triangulatedInputFile + "_Coloured_RemovedFrontPart.txt";
 
@@ -415,12 +424,13 @@ int main(int argc, char** argv)
 		cout << "Which one of the following colouring choices does the triangulation file use Only coloured,coloured and remove front    part of the brain or with no colours? press 1 for only coloured, 2 for removal  and 3 for no colours." << endl;
 		cin >> colouredChoice;
 
-		while (!colouredChoice == 1 || !colouredChoice == 2 || !colouredChoice == 3) {
+		while (colouredChoice < 1 || colouredChoice> 3) {
 			cout << "Please choose a correct colouring choice." << endl;
 			cin >> colouredChoice;
 
 		}
-		 
+
+
 	}
 
 	if(colouredChoice == 1)
@@ -445,6 +455,11 @@ int main(int argc, char** argv)
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
+//	glEnable(GL_LIGHT0);
+//	glEnable(GL_LIGHT1);
+//	glEnable(GL_LIGHT2);
+//	glEnable(GL_LIGHT3);
+
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_COLOR_MATERIAL);
 
