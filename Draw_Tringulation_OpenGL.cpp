@@ -377,16 +377,11 @@ int main(int argc, char** argv)
 
 	if (choice == 3) {
 		colouredChoice = 1;
-		cout << "Please input the name of the .txt file you want to colour (do not include .txt in the input)." << endl;
+		cout << "Please input the name of the original text file (do not include .txt in the input)." << endl;
 		cin >> inputFile;
 		string triangulatedInputFile;
-		cout << "Please enter the name of the triangulated input file"<<endl;
+		cout << "Please enter the name of the triangulated input file (do not include .txt in the input)."<<endl;
 		cin >> triangulatedInputFile;
-		while (triangulationType < 1 || triangulationType> 2) {
-			cout << "Please choose a correct triangulation type." << endl;
-			cin >> triangulationType;
-
-		}
 
 		Manage_TraingulationOutput(inputFile, triangulatedInputFile, true, false);
 		finalFile = triangulatedInputFile + "_Coloured.txt";
@@ -396,17 +391,11 @@ int main(int argc, char** argv)
 
 	if (choice == 4) {
 		colouredChoice = 2;
-		cout << "Please input the name of the .txt file you want to preform the operations on (do not include .txt in the input)." << endl;
+		cout << "Please input the name of the original text file (do not include .txt in the input)." << endl;
 		cin >> inputFile;
 		string triangulatedInputFile;
-		cout << "Please enter the name of the triangulated input file" << endl;
+		cout << "Please enter the name of the triangulated input file (do not include .txt in the input)." << endl;
 		cin >> triangulatedInputFile;
-
-		while (triangulationType < 1 || triangulationType> 2) {
-			cout << "Please choose a correct triangulation type." << endl;
-			cin >> triangulationType;
-
-		}
 
 		Manage_TraingulationOutput(inputFile, triangulatedInputFile, true, true);
 		finalFile = triangulatedInputFile + "_Coloured_RemovedFrontPart.txt";
@@ -421,7 +410,7 @@ int main(int argc, char** argv)
 
 		finalFile = inputFile + ".txt";
 
-		cout << "Which one of the following colouring choices does the triangulation file use Only coloured,coloured and remove front    part of the brain or with no colours? press 1 for only coloured, 2 for removal  and 3 for no colours." << endl;
+		cout << "Which one of the following colouring choices does the triangulation file use? Only coloured,coloured and remove front    part of the brain or with no colours? press 1 for only coloured, 2 for removal  and 3 for no colours." << endl;
 		cin >> colouredChoice;
 
 		while (colouredChoice < 1 || colouredChoice> 3) {
@@ -455,10 +444,10 @@ int main(int argc, char** argv)
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
-//	glEnable(GL_LIGHT0);
-//	glEnable(GL_LIGHT1);
-//	glEnable(GL_LIGHT2);
-//	glEnable(GL_LIGHT3);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT2);
+	glEnable(GL_LIGHT3);
 
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_COLOR_MATERIAL);

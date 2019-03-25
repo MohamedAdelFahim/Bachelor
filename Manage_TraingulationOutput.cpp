@@ -108,11 +108,10 @@ int Manage_TraingulationOutput(string originalFile, string newFile, bool coloure
 
 			for (int j = 0; j < length; j++) {
 
-
 				if (*(dataXPTri + i) == *(dataXP + j) && *(dataYPTri + i) == *(dataYP + j) && *(dataZPTri + i) == *(dataZP + j)) {
-					dataVTri.push_back((*dataVP + j));
+					dataVTri.push_back(*(dataVP + j));
 					if (remove)
-						dataITri.push_back((*dataIP + j));
+						dataITri.push_back(*(dataIP + j));
 					break;
 				}
 
@@ -139,22 +138,22 @@ int Manage_TraingulationOutput(string originalFile, string newFile, bool coloure
 		count = 0;
 		for (int i = 0; i < length; i++) {
 
-			outData << dataXTri.at(i) << " ";
-			outData << dataYTri.at(i) << " ";
+			outData << dataXTri[i]<< " ";
+			outData << dataYTri[i]<< " ";
 
 			if (coloured && remove) {
-				outData << dataZTri.at(i) << " ";
-				outData << dataVTri.at(i) << " ";
-				outData << dataITri.at(i) << endl;
+				outData << dataZTri[i] << " ";
+				outData << dataVTri[i] << " ";
+				outData << dataITri[i] << endl;
 
 			}
 			else if (coloured && !remove) {
-				outData << dataZTri.at(i) << " ";
-				outData << dataVTri.at(i) << endl;
+				outData << dataZTri[i] << " ";
+				outData << dataVTri[i] << endl;
 
 			}
 			else {
-				outData << dataZTri.at(i) << endl;
+				outData << dataZTri[i] << endl;
 			}
 
 			count++;
