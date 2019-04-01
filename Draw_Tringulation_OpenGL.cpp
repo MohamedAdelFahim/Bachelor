@@ -7,7 +7,6 @@
 #include <direct.h>
 #include <vector>
 #include <GL/freeglut.h>
-
 #include "functions.h"
 using namespace std;
 
