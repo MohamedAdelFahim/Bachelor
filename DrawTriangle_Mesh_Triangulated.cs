@@ -58,7 +58,7 @@ public class DrawTriangle_Mesh_Triangulated : MonoBehaviour
     int [] trianglesFlip = new int [size] ;
 
     int index = 0;
-    
+    int count = 0;
     Debug.Log("done 1");
     
 // reader = new StreamReader("Assets/Input/OutputWithColours.txt");
