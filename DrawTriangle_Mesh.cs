@@ -9,9 +9,25 @@ public class DrawTriangle_Mesh : MonoBehaviour
 // Use this for initialization
         void Start()
     {
+
+//         Material material = Resources.Load("Vertex_Colored", typeof(Material)) as Material;
        System.DateTime start = System.DateTime.Now;
 
-
+                Material mat;
+            // Unity has a built-in shader that is useful for drawing
+            // simple colored things. In this case, we just want to use
+            // a blend mode that inverts destination colors.
+            var shader = Shader.Find("Particles/Standard Surface");
+            mat = new Material(shader);
+          //  mat.hideFlags = HideFlags.HideAndDontSave;
+            // Set blend mode to invert destination colors.
+           // mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusDstColor);
+            //mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+            // Turn off backface culling, depth writes, depth test.
+            //mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+            //mat.SetInt("_ZWrite", 0);
+            //mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
+       //     mat.color = new Color(1,0,0);
         int size = 0;
         string line;
         
@@ -59,7 +75,7 @@ file.Close();
      for(int i =0; i< numberOfMeshes; i++){
             listOfObjects[i] = new GameObject("MeshObject" + (i+1));
      }
-
+  string[] entries ;
      using (reader)
       {
           
@@ -70,20 +86,22 @@ file.Close();
                   do
                   {
                        
-                         string[] entries = line.Split(' ');
+                         entries = line.Split(' ');
                          if (entries.Length > 0){
                                 
                              vertices [meshCount]  = new Vector3 ((float) System.Convert.ToDouble(entries[0]),(float) System.Convert.ToDouble(entries[1]),(float) System.Convert.ToDouble(entries[2]));
                              triangles [meshCount] = index;
                             
-                            if(entries.Length == 4)   
-                            colors [meshCount] = new Color (System.Convert.ToInt32(entries[3])/255, System.Convert.ToInt32(entries[3])/255, System.Convert.ToInt32(entries[3])/255, 0);
+                            if(entries.Length == 4 || entries.Length == 5)    
+                            colors [meshCount] = new Color ((float) System.Convert.ToDouble(entries[3])/255, (float) System.Convert.ToDouble(entries[3])/255,(float) System.Convert.ToDouble(entries[3])/255, 0);
                             
                             index ++;
                             meshCount ++;
                                   if(meshCount == maxVectorSize){
                                    listOfObjects[currentMesh].AddComponent<MeshFilter>();
                                    listOfObjects[currentMesh].AddComponent<MeshRenderer>();
+
+                                   listOfObjects[currentMesh].GetComponent<MeshRenderer>().material = mat;
                                    listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.vertices = vertices ; 
                                    listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.triangles = triangles ; 
        
@@ -107,9 +125,10 @@ file.Close();
                     listOfObjects[currentMesh].AddComponent<MeshRenderer>();
                     listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.vertices = vertices ; 
                     listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.triangles = triangles ; 
+                    listOfObjects[currentMesh].GetComponent<MeshRenderer>().material = mat;
                     
-//                    if(entries.Length == 4)
-//                       listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.colors = colors ; 
+                    if(entries.Length == 4 || entries.Length == 5)
+                       listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.colors = colors ; 
           
           } 
           
