@@ -15,9 +15,9 @@ public class DrawTriangle_Mesh : MonoBehaviour
         int size = 0;
         string line;
         
-
+string fileName = "Assets/Input/out1_DeluanyTriangulation_Coloured.txt";
 System.IO.StreamReader file =   
-    new System.IO.StreamReader("Assets/Input/out1_DeluanyTriangulation_Coloured.txt");  
+    new System.IO.StreamReader(fileName);  
 while((line = file.ReadLine()) != null)  
 {  
     if(line != "")
@@ -26,7 +26,9 @@ while((line = file.ReadLine()) != null)
 file.Close();  
     Debug.Log(size);
 
- StreamReader reader = new StreamReader("Assets/Input/out1_DeluanyTriangulation_Coloured.txt");
+ file =   
+    new System.IO.StreamReader(fileName);  
+
 
     int maxSize = size;
     if(! (size%3 == 0)){
@@ -44,9 +46,9 @@ file.Close();
     int index = 0;
     
     
-  Color32 currentColor = new Color32();
-     Color32[] colors = new Color32[triangles.Length];
- reader = new StreamReader("Assets/Input/out1_NormalTriangulation_Coloured.txt");
+    Color[] colors = new Color[65535];
+
+ StreamReader reader = new StreamReader(fileName);
 
     int meshCount = 0;
     int currentMesh =0;
@@ -55,9 +57,9 @@ file.Close();
          GameObject [] listOfObjects =new GameObject [numberOfMeshes] ;
     
      for(int i =0; i< numberOfMeshes; i++){
-            listOfObjects[i] = new GameObject("MeshObject" + i);
+            listOfObjects[i] = new GameObject("MeshObject" + (i+1));
      }
-     Mesh mesh = new Mesh();
+
      using (reader)
       {
           
@@ -73,19 +75,22 @@ file.Close();
                                 
                              vertices [meshCount]  = new Vector3 ((float) System.Convert.ToDouble(entries[0]),(float) System.Convert.ToDouble(entries[1]),(float) System.Convert.ToDouble(entries[2]));
                              triangles [meshCount] = index;
+                            
+                            if(entries.Length == 4)   
+                            colors [meshCount] = new Color (System.Convert.ToInt32(entries[3])/255, System.Convert.ToInt32(entries[3])/255, System.Convert.ToInt32(entries[3])/255, 0);
+                            
                             index ++;
                             meshCount ++;
                                   if(meshCount == maxVectorSize){
-                                      mesh.Clear();
                                    listOfObjects[currentMesh].AddComponent<MeshFilter>();
                                    listOfObjects[currentMesh].AddComponent<MeshRenderer>();
                                    listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.vertices = vertices ; 
                                    listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.triangles = triangles ; 
+       
+                                  if(entries.Length == 4)
+                                   listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.colors = colors ; 
                                  
-                               //   mesh.vertices = vertices;
-                                 // mesh.triangles = triangles;
-                                
-
+                               
                                     currentMesh++;
                                     meshCount =0;
                                     index = 0;
@@ -98,47 +103,24 @@ file.Close();
                          line = reader.ReadLine();
                   }
                   while (line != null );
-                    mesh.Clear();
                     listOfObjects[currentMesh].AddComponent<MeshFilter>();
                     listOfObjects[currentMesh].AddComponent<MeshRenderer>();
-                    mesh  = GetComponent<MeshFilter>().mesh; 
-                                 
-                    mesh.vertices = vertices;
-                    mesh.triangles = triangles;
+                    listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.vertices = vertices ; 
+                    listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.triangles = triangles ; 
+                    
+//                    if(entries.Length == 4)
+//                       listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.colors = colors ; 
           
           } 
           
           // Done reading, close the reader and return true to broadcast success    
           reader.Close();
           }
-
-          
-/*
-          for(int i=0; i<numberOfMeshes;i++){
-              mesh[i].vertices = vertices[i];
-              mesh[i].triangles = triangles[i];
-
-          }
-*/
-
           System.DateTime after = System.DateTime.Now; 
           System.TimeSpan duration = after.Subtract(start);
 Debug.Log("Duration in seconds: " + duration.Seconds);
-        // make changes to the Mesh by creating arrays which contain the new values
-        //mesh.vertices = vertices;
-//        mesh.uv = new Vector2[] {new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1)};
-        //mesh.triangles = triangles; 
+
         int count = 0;
- /*
-            for(int i = maxSize; i>0;i--)
-        {
-            trianglesFlip[i] = i;
-            count ++;
-        }
-        Debug.Log(vertices.Length);
-        */
-        //meshFlipped.vertices = vertices;
-        //meshFlipped.triangles = trianglesFlip;
           System.DateTime end = System.DateTime.Now; 
         System.TimeSpan durationEnd = end.Subtract(start);
         Debug.Log("Duration in seconds: " + durationEnd.Seconds);
