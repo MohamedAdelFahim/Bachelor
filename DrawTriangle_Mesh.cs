@@ -10,28 +10,18 @@ public class DrawTriangle_Mesh : MonoBehaviour
         void Start()
     {
 
-//         Material material = Resources.Load("Vertex_Colored", typeof(Material)) as Material;
-       System.DateTime start = System.DateTime.Now;
+    string fileName = "Assets/Input/out1_DeluanyTriangulation_Coloured.txt";
 
+
+       System.DateTime start = System.DateTime.Now;
                 Material mat;
-            // Unity has a built-in shader that is useful for drawing
-            // simple colored things. In this case, we just want to use
-            // a blend mode that inverts destination colors.
-            var shader = Shader.Find("Particles/Standard Surface");
+             var shader = Shader.Find("Particles/Standard Surface");
             mat = new Material(shader);
-          //  mat.hideFlags = HideFlags.HideAndDontSave;
-            // Set blend mode to invert destination colors.
-           // mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusDstColor);
-            //mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-            // Turn off backface culling, depth writes, depth test.
-            //mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
-            //mat.SetInt("_ZWrite", 0);
-            //mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
-       //     mat.color = new Color(1,0,0);
-        int size = 0;
+        
+         int size = 0;
         string line;
         
-string fileName = "Assets/Input/out1_DeluanyTriangulation_Coloured.txt";
+//string fileName = "Assets/Input/out1_DeluanyTriangulation_Coloured_RemovedFrontPart.txt";
 System.IO.StreamReader file =   
     new System.IO.StreamReader(fileName);  
 while((line = file.ReadLine()) != null)  
@@ -88,15 +78,35 @@ file.Close();
                        
                          entries = line.Split(' ');
                          if (entries.Length > 0){
-                                
+
+                            if(entries.Length  < 5){    
+
                              vertices [meshCount]  = new Vector3 ((float) System.Convert.ToDouble(entries[0]),(float) System.Convert.ToDouble(entries[1]),(float) System.Convert.ToDouble(entries[2]));
                              triangles [meshCount] = index;
                             
-                            if(entries.Length == 4 || entries.Length == 5)    
-                            colors [meshCount] = new Color ((float) System.Convert.ToDouble(entries[3])/255, (float) System.Convert.ToDouble(entries[3])/255,(float) System.Convert.ToDouble(entries[3])/255, 0);
+                            if(entries.Length == 4 )    
+                                colors [meshCount] = new Color ((float) System.Convert.ToDouble(entries[3])/255, (float) System.Convert.ToDouble(entries[3])/255,(float) System.Convert.ToDouble(entries[3])/255, 0); 
+                                index ++;
+                                meshCount ++;
+                            }
+                            else{
+
+                                if(System.Convert.ToInt32(entries[4]) < 17){
+                                line = reader.ReadLine();
+                                line = reader.ReadLine();
+                                }
+
+                                else{
+                                       vertices [meshCount]  = new Vector3 ((float) System.Convert.ToDouble(entries[0]),(float) System.Convert.ToDouble(entries[1]),(float) System.Convert.ToDouble(entries[2]));
+                                       triangles [meshCount] = index;                            
+                                       colors [meshCount] = new Color ((float) System.Convert.ToDouble(entries[3])/255, (float) System.Convert.ToDouble(entries[3])/255,(float) System.Convert.ToDouble(entries[3])/255, 0);
                             
-                            index ++;
-                            meshCount ++;
+                                        index ++;
+                                        meshCount ++;
+                          
+                                }
+
+                            }
                                   if(meshCount == maxVectorSize){
                                    listOfObjects[currentMesh].AddComponent<MeshFilter>();
                                    listOfObjects[currentMesh].AddComponent<MeshRenderer>();
@@ -105,10 +115,9 @@ file.Close();
                                    listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.vertices = vertices ; 
                                    listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.triangles = triangles ; 
        
-                                  if(entries.Length == 4)
+                                  if(entries.Length == 4 || entries.Length == 5)
                                    listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.colors = colors ; 
-                                 
-                               
+                                                                
                                     currentMesh++;
                                     meshCount =0;
                                     index = 0;
@@ -121,6 +130,13 @@ file.Close();
                          line = reader.ReadLine();
                   }
                   while (line != null );
+
+                  for(int i = currentMesh ; i< numberOfMeshes ; i++){
+                             vertices [i]  = new Vector3(0, 0, 0);
+                             triangles [i] = 0;
+                      
+                  } 
+
                     listOfObjects[currentMesh].AddComponent<MeshFilter>();
                     listOfObjects[currentMesh].AddComponent<MeshRenderer>();
                     listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.vertices = vertices ; 
@@ -129,7 +145,7 @@ file.Close();
                     
                     if(entries.Length == 4 || entries.Length == 5)
                        listOfObjects[currentMesh].GetComponent<MeshFilter>().mesh.colors = colors ; 
-          
+
           } 
           
           // Done reading, close the reader and return true to broadcast success    
