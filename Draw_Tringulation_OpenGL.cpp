@@ -1,6 +1,6 @@
 
 #include "pch.h"
-
+#include <chrono> 
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -12,14 +12,24 @@ using namespace std;
 
 
 
+//50 0 -30 17 0.5 230
+double rotx = 50;
+double roty = 0;
+double rotz = -30;
+
+int loc = 250;
+
+short is = 18;
+
+/*
 double rotx = 100;
 double roty = 50;
 double rotz = -30;
 
 int loc = 220;
 
-short is = 17;
-
+short is = 18;
+*/
 double sss = 0.5;
 
 struct point {
@@ -63,63 +73,33 @@ void setupCamera() {
 	gluLookAt(0, 0, loc, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 }
 
-void setupLights() {
+void setupLight0() {
 
+	glEnable(GL_LIGHTING);
+	glDisable(GL_LIGHT1);
+	glEnable(GL_LIGHT0);
 
-	GLfloat lmodel_ambient[] = { 0.1f, 0.1f, 0.1f, 1.0f };
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
+	GLfloat ambient[] = { 0.05f, 0.05f, 0.05, 1.0f };
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
 
-	GLfloat l0Diffuse[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-	GLfloat l0Spec[] = { 1.0f, 1.0f, 0.0f, 1.0f };
-	GLfloat l0Ambient[] = { 0.1f, 0.0f, 0.0f, 1.0f };
-	GLfloat l0Position[] = { 255.0f, 0.0f, 0.0f, 1 };
-	GLfloat l0Direction[] = { -1.0, 0.0, 0.0 };
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, l0Diffuse);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, l0Ambient);
-	glLightfv(GL_LIGHT0, GL_POSITION, l0Position);
-	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 30.0);
-	glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 90.0);
-	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, l0Direction);
+	// Define Light source 0 diffuse light
+	GLfloat diffuse[] = { 0.25f, 0.25f, 0.25f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
 
-	GLfloat l1Diffuse[] = { 0.0f, 1.0f, 0.0f, 1.0f };
-	GLfloat l1Ambient[] = { 0.0f, 0.1f, 0.0f, 1.0f };
-	GLfloat l1Position[] = { 0.0f, 255.0f, 0.0f, 1 };
-	GLfloat l1Direction[] = { 0.0, -1.0, 0.0 };
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, l1Diffuse);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, l1Ambient);
-	glLightfv(GL_LIGHT1, GL_POSITION, l1Position);
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 90.0);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, l1Direction);
+	// Define Light source 0 Specular light
+	GLfloat specular[] = { 15.0f, 15.0f, 15.0f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 
-	GLfloat l2Diffuse[] = { 0.0f, 0.0f, 1.0f, 1.0f };
-	GLfloat l2Ambient[] = { 0.0f, 0.0f, 0.1f, 1.0f };
-	GLfloat l2Position[] = { 0.0f, 0.0f, 255, 1 };
-	GLfloat l2Direction[] = { 0.0, 0.0, -1.0 };
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, l2Diffuse);
-	glLightfv(GL_LIGHT2, GL_AMBIENT, l2Ambient);
-	glLightfv(GL_LIGHT2, GL_POSITION, l2Position);
-	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 30.0);
-	glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 90.0);
-	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, l2Direction);
-
-	GLfloat l3Diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat l3Ambient[] = { 0.1f, 0.1f, 0.1f, 1.0f };
-	GLfloat l3Position[] = { 0.0f, 0.0f, loc + 10, 1 };
-	GLfloat l3Direction[] = { 0.0, 0.0, -1.0 };
-	glLightfv(GL_LIGHT3, GL_DIFFUSE, l2Diffuse);
-	glLightfv(GL_LIGHT3, GL_AMBIENT, l2Ambient);
-	glLightfv(GL_LIGHT3, GL_POSITION, l2Position);
-	glLightf(GL_LIGHT3, GL_SPOT_CUTOFF, 30.0);
-	glLightf(GL_LIGHT3, GL_SPOT_EXPONENT, 90.0);
-	glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, l2Direction);
-
+	glPushMatrix();
+	GLfloat lightpos[4] = { -18.0f, 0.0f, 0.0f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+	glPopMatrix();
 
 }
-
 void Display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	auto start = std::chrono::high_resolution_clock::now();
 
 
 	setupCamera();
@@ -132,7 +112,7 @@ void Display() {
 	glRotated(rotx - 90, 1, 0, 0);
 	glRotated(roty + 90, 0, 1, 0);
 	glRotated(rotz, 0, 0, 1);
-	setupLights();
+	setupLight0();
 	glTranslated(-133, -133, -87);
 
 
@@ -149,14 +129,13 @@ void Display() {
 		if (points[i].dataI < is)
 			continue;
 
-
-			glColor3f(points[i].dataV/255 , points[i].dataV/255 , points[i].dataV /255);
+			glColor3f((float) points[i].dataV / 255 , (float) points[i].dataV / 255 , (float) points[i].dataV / 255 );
      		glVertex3f(points[i].dataX, points[i].dataY, points[i].dataZ);
 	
-			glColor3f(points[i+1].dataV / 255.0, points[i+1].dataV / 255.0, points[i+1].dataV / 255.0);
+			glColor3f((float) points[i+1].dataV / 255.0 , (float) points[i+1].dataV / 255.0 , (float) points[i+1].dataV / 255.0 );
 			glVertex3f(points[i+1].dataX, points[i + 1].dataY, points[i + 1].dataZ);
 
-			glColor3f(points[i+2].dataV / 255.0, points[i+2].dataV / 255.0, points[i+2].dataV / 255.0);
+			glColor3f((float) points[i+2].dataV / 255.0 , (float) points[i+2].dataV / 255.0 , (float) points[i+2].dataV / 255.0 );
 			glVertex3f(points[i + 2].dataX, points[i + 2].dataY, points[i + 2].dataZ);
 
 
@@ -166,7 +145,11 @@ void Display() {
 
 	glPopMatrix();
 
-	cout << "done" << endl;
+	auto finish = chrono::high_resolution_clock::now();
+	chrono::duration<double> elapsed = finish - start;
+
+	std::cout << "Finished drawing, Elapsed time: " << elapsed.count() *1000 << " miliseconds.\n";
+
 
 	glFlush();
 }
@@ -420,6 +403,9 @@ int main(int argc, char** argv)
 
 
 	}
+	auto startReading = chrono::high_resolution_clock::now();
+
+
 
 	if(colouredChoice == 1)
 	readFile4Points(finalFile);
@@ -427,6 +413,11 @@ int main(int argc, char** argv)
 	readFile5Points(finalFile);
 	else
 	readFile3Points(finalFile);
+
+	auto finishReading = chrono::high_resolution_clock::now();
+	chrono::duration<double> elapsed = finishReading - startReading;
+
+	std::cout << "Elapsed time: " << elapsed.count() * 1000 << " miliseconds.\n";
 
 
 	glutInit(&argc, argv);
@@ -444,9 +435,9 @@ int main(int argc, char** argv)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
-	glEnable(GL_LIGHT2);
-	glEnable(GL_LIGHT3);
+	//glEnable(GL_LIGHT1);
+	//glEnable(GL_LIGHT2);
+	//glEnable(GL_LIGHT3);
 
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_COLOR_MATERIAL);

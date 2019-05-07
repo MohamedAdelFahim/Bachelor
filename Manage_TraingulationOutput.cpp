@@ -39,7 +39,6 @@ int Manage_TraingulationOutput(string originalFile, string newFile, bool coloure
 	std::getline(myfile, str);
 	length = std::stoi(str);
 
-	
 	dataX.reserve(length);
 	dataY.reserve(length);
 	dataZ.reserve(length);
