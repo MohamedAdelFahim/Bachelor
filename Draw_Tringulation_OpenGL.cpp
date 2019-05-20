@@ -12,25 +12,15 @@ using namespace std;
 
 
 
-//50 0 -30 17 0.5 230
+//50 0 -30 18 0.5 230
 double rotx = 50;
 double roty = 0;
 double rotz = -30;
 
-int loc = 250;
+int loc = 230;
 
 short is = 18;
 
-/*
-double rotx = 100;
-double roty = 50;
-double rotz = -30;
-
-int loc = 220;
-
-short is = 18;
-*/
-double sss = 0.5;
 
 struct point {
 	short dataX;
@@ -76,14 +66,13 @@ void setupCamera() {
 void setupLight0() {
 
 	glEnable(GL_LIGHTING);
-	glDisable(GL_LIGHT1);
 	glEnable(GL_LIGHT0);
 
 	GLfloat ambient[] = { 0.05f, 0.05f, 0.05, 1.0f };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
 
 	// Define Light source 0 diffuse light
-	GLfloat diffuse[] = { 0.25f, 0.25f, 0.25f, 1.0f };
+	GLfloat diffuse[] = { 0.75f, 0.75f, 0.75f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
 
 	// Define Light source 0 Specular light
@@ -91,10 +80,12 @@ void setupLight0() {
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 
 	glPushMatrix();
-	GLfloat lightpos[4] = { -18.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat lightpos[4] = { -25.0f, 0.0f, 80.0f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 	glPopMatrix();
 
+
+	
 }
 void Display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -113,6 +104,8 @@ void Display() {
 	glRotated(roty + 90, 0, 1, 0);
 	glRotated(rotz, 0, 0, 1);
 	setupLight0();
+	
+
 	glTranslated(-133, -133, -87);
 
 
@@ -175,17 +168,13 @@ void key(unsigned char k, int x, int y)
 	if (k == 'w')
 		is--;
 
-	if (k == 'e')
-		sss /= 2;
-	if (k == 'r')
-		sss *= 2;
-
+	
 	if (k == 'z')
 		loc -= 10;
 	if (k == 'x')
 		loc += 10;
 
-	cout << rotx << " " << roty << " " << rotz << " " << is << " " << sss << " " << loc << endl;
+	cout << rotx << " " << roty << " " << rotz << " " << is << " " << loc << endl;
 
 	glutPostRedisplay();
 
